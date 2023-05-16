@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BkCommentMapper">
+
+    <resultMap type="BkComment" id="BkCommentResult">
+        <result property="id"    column="id"    />
+        <result property="founder"    column="founder"    />
+        <result property="time"    column="time"    />
+        <result property="content"    column="content"    />
+        <result property="img"    column="img"    />
+    </resultMap>
+
+    <sql id="selectBkCommentVo">
+        select id, founder, time, content, img from bk_comment
+    </sql>
+
+    <select id="selectBkCommentList" parameterType="BkComment" resultMap="BkCommentResult">
+        <include refid="selectBkCommentVo"/>
+        <where>
+            <if test="founder != null  and founder != ''"> and founder = #{founder}</if>
+            <if test="params.beginTime != null and params.beginTime != '' and params.endTime != null and params.endTime != ''"> and time between #{params.beginTime} and #{params.endTime}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+        </where>
+    </select>
+
+    <select id="selectBkCommentById" parameterType="Long" resultMap="BkCommentResult">
+        <include refid="selectBkCommentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBkComment" parameterType="BkComment" useGeneratedKeys="true" keyProperty="id">
+        insert into bk_comment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="founder != null">founder,</if>
+            <if test="time != null">time,</if>
+            <if test="content != null">content,</if>
+            <if test="img != null">img,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="founder != null">#{founder},</if>
+            <if test="time != null">#{time},</if>
+            <if test="content != null">#{content},</if>
+            <if test="img != null">#{img},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBkComment" parameterType="BkComment">
+        update bk_comment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="founder != null">founder = #{founder},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="img != null">img = #{img},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBkCommentById" parameterType="Long">
+        delete from bk_comment where id = #{id}
+    </delete>
+
+    <delete id="deleteBkCommentByIds" parameterType="String">
+        delete from bk_comment where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

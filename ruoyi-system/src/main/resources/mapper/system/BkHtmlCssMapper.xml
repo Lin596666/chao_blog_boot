@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BkHtmlCssMapper">
+    
+    <resultMap type="BkHtmlCss" id="BkHtmlCssResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="contenta"    column="contenta"    />
+        <result property="contentb"    column="contentb"    />
+    </resultMap>
+
+    <sql id="selectBkHtmlCssVo">
+        select id, title, contenta, contentb from bk_html_css
+    </sql>
+
+    <select id="selectBkHtmlCssList" parameterType="BkHtmlCss" resultMap="BkHtmlCssResult">
+        <include refid="selectBkHtmlCssVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="contenta != null  and contenta != ''"> and contenta = #{contenta}</if>
+            <if test="contentb != null  and contentb != ''"> and contentb = #{contentb}</if>
+        </where>
+    </select>
+    
+    <select id="selectBkHtmlCssById" parameterType="Long" resultMap="BkHtmlCssResult">
+        <include refid="selectBkHtmlCssVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBkHtmlCss" parameterType="BkHtmlCss">
+        insert into bk_html_css
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="title != null">title,</if>
+            <if test="contenta != null">contenta,</if>
+            <if test="contentb != null">contentb,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="title != null">#{title},</if>
+            <if test="contenta != null">#{contenta},</if>
+            <if test="contentb != null">#{contentb},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBkHtmlCss" parameterType="BkHtmlCss">
+        update bk_html_css
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="contenta != null">contenta = #{contenta},</if>
+            <if test="contentb != null">contentb = #{contentb},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBkHtmlCssById" parameterType="Long">
+        delete from bk_html_css where id = #{id}
+    </delete>
+
+    <delete id="deleteBkHtmlCssByIds" parameterType="String">
+        delete from bk_html_css where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

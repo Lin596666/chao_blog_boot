@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BkVideoMapper">
+    
+    <resultMap type="BkVideo" id="BkVideoResult">
+        <result property="id"    column="id"    />
+        <result property="videourl"    column="videourl"    />
+        <result property="password"    column="password"    />
+        <result property="title"    column="title"    />
+    </resultMap>
+
+    <sql id="selectBkVideoVo">
+        select id, videourl, password, title from bk_video
+    </sql>
+
+    <select id="selectBkVideoList" parameterType="BkVideo" resultMap="BkVideoResult">
+        <include refid="selectBkVideoVo"/>
+        <where>  
+            <if test="videourl != null  and videourl != ''"> and videourl = #{videourl}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+        </where>
+    </select>
+    
+    <select id="selectBkVideoById" parameterType="Long" resultMap="BkVideoResult">
+        <include refid="selectBkVideoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBkVideo" parameterType="BkVideo">
+        insert into bk_video
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="videourl != null">videourl,</if>
+            <if test="password != null">password,</if>
+            <if test="title != null">title,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="videourl != null">#{videourl},</if>
+            <if test="password != null">#{password},</if>
+            <if test="title != null">#{title},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBkVideo" parameterType="BkVideo">
+        update bk_video
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="videourl != null">videourl = #{videourl},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="title != null">title = #{title},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBkVideoById" parameterType="Long">
+        delete from bk_video where id = #{id}
+    </delete>
+
+    <delete id="deleteBkVideoByIds" parameterType="String">
+        delete from bk_video where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

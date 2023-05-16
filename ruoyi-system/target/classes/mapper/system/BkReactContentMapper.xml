@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BkReactContentMapper">
+
+    <resultMap type="BkReactContent" id="BkReactContentResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="showis"    column="showis"    />
+    </resultMap>
+
+    <sql id="selectBkReactContentVo">
+        select id, title, showis from bk_react_content
+    </sql>
+
+    <select id="selectBkReactContentList" parameterType="BkReactContent" resultMap="BkReactContentResult">
+        <include refid="selectBkReactContentVo"/>
+        <where>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="showis != null  and showis != ''"> and showis = #{showis}</if>
+        </where>
+    </select>
+
+    <select id="selectBkReactContentById" parameterType="Long" resultMap="BkReactContentResult">
+        <include refid="selectBkReactContentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBkReactContent" parameterType="BkReactContent" useGeneratedKeys="true" keyProperty="id">
+        insert into bk_react_content
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="showis != null">showis,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="showis != null">#{showis},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBkReactContent" parameterType="BkReactContent">
+        update bk_react_content
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="showis != null">showis = #{showis},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBkReactContentById" parameterType="Long">
+        delete from bk_react_content where id = #{id}
+    </delete>
+
+    <delete id="deleteBkReactContentByIds" parameterType="String">
+        delete from bk_react_content where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
